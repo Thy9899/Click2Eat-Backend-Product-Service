@@ -3,11 +3,15 @@ const express = require("express");
 const morgan = require("morgan");
 const connectDB = require("./src/util/db");
 const productsRoutes = require("./src/routes/products.route");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+
+// Enable CORS
+app.use(cors());
 
 // Connect DB
 connectDB().catch((err) => {
