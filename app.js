@@ -2,30 +2,29 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const connectDB = require("./src/util/db");
-const productsRoutes = require("./src/routes/products.route");
+const customerRoutes = require("./src/routes/customer.route");
 const cors = require("cors");
 
 const app = express();
 
-app.use(express.json());
-app.use(morgan("dev"));
-
 // Enable CORS
 app.use(cors());
 
-// Connect DB
-connectDB().catch((err) => {
-  console.error("❌ Failed to connect to MongoDB:", err);
-  process.exit(1);
-});
+// Middleware
+app.use(express.json());
+app.use(morgan("dev"));
 
-// Static images folder
+// Connect MongoDB
+connectDB();
+
+// Static folder for images
 app.use("/Images", express.static("public/Images"));
 
 // Routes
-app.use("/api", productsRoutes);
+app.use("/api/customers", customerRoutes);
 
-const PORT = process.env.PORT || 5003;
-app.listen(PORT, () =>
-  console.log(`✅ Product service running on port ${PORT}`)
-);
+// Start server
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, () => {
+  console.log(`✅ Customer service running on port ${PORT}`);
+});
